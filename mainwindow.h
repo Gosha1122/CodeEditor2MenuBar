@@ -25,12 +25,11 @@ public:
 
 private slots:
     void ruleChengeButton();
-
     void on_action_3_triggered();
 
 private:
     Ui::MainWindow *ui;
-
+    QString replaceText;
     QString searchinText;
     void setInterfaceStyle();
 };

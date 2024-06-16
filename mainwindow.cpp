@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "configreader.h"
 #include "stylehelper.h"
+#include "searchwin.h"
 #include "dialog.h"
 #include <QDebug>
 
@@ -45,5 +46,21 @@ void MainWindow::setInterfaceStyle()
 {
     StyleHelper::setFonts();
     this->setStyleSheet(StyleHelper::getMainStyleLight()); 
+}
+
+
+void MainWindow::on_action_3_triggered()
+{
+    searchWin dlg(this);
+    dlg.exec();
+    if(dlg.back){
+        if(dlg.searchOrRepl){
+           searchinText = dlg.searchGo();
+           qDebug()<<"serch"<<searchinText;
+        }else{
+            searchinText = dlg.searchAndRepGo();
+            qDebug()<<"rep"<<searchinText;
+        }
+    }
 }
 

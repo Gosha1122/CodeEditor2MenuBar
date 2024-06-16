@@ -22,12 +22,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 private slots:
     void ruleChengeButton();
+
+    void on_action_3_triggered();
 
 private:
     Ui::MainWindow *ui;
 
+    QString searchinText;
     void setInterfaceStyle();
 };
 #endif // MAINWINDOW_H

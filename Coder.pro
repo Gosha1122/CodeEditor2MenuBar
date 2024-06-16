@@ -18,6 +18,7 @@ SOURCES += \
     highlighterQss.cpp \
     main.cpp \
     mainwindow.cpp \
+    searchwin.cpp \
     stylehelper.cpp
 
 HEADERS += \
@@ -29,11 +30,13 @@ HEADERS += \
     highlighterJson.h \
     highlighterQss.h \
     mainwindow.h \
+    searchwin.h \
     stylehelper.h
 
 FORMS += \
     dialog.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    searchwin.ui
 
 DISTFILES += \
     default.conf

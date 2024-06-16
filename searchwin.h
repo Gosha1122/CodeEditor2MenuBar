@@ -19,8 +19,10 @@ public:
 
     void searchButton();
     void searchAndRepButton();
+    void backButton();
 
-    bool CopyOrRepl;
+    bool back;
+    bool searchOrRepl;
 private:
     Ui::searchWin *ui;
 };

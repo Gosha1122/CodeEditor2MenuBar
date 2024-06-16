@@ -21,10 +21,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void searchButtonClicked();
+
 
 private slots:
     void ruleChengeButton();
+
+    void on_action_3_triggered();
 
 private:
     Ui::MainWindow *ui;

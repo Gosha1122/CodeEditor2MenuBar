@@ -5,9 +5,13 @@ searchWin::searchWin(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::searchWin)
 {
+
     ui->setupUi(this);
-    connect(ui->pushButton,&QPushButton::clicked,this,&searchWin::searchButton);
-    connect(ui->pushButton,&QPushButton::clicked,this,&searchWin::searchAndRepButton);
+    QDialog::setWindowTitle ("Поиск" );
+    back=false;
+    connect(ui->serchButton,&QPushButton::clicked,this,&searchWin::searchButton);
+    connect(ui->serchAndRepButton,&QPushButton::clicked,this,&searchWin::searchAndRepButton);
+    connect(ui->pushButton,&QPushButton::clicked,this,&searchWin::backButton);
 }
 
 searchWin::~searchWin()
@@ -27,11 +31,19 @@ QString searchWin::searchAndRepGo()
 
 void searchWin::searchButton()
 {
-    CopyOrRepl=true;
+    back=true;
+    searchOrRepl=true;
+    this->accept();
 }
 
 void searchWin::searchAndRepButton()
 {
-    CopyOrRepl=false;
+    back=true;
+    searchOrRepl=false;
+    this->accept();
 }
-
+void searchWin::backButton()
+{
+    back=false;
+    this->accept();
+}

@@ -31,19 +31,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::searchButtonClicked()
-{
-    searchWin dlg(this);
-    dlg.exec();
-    if(dlg.CopyOrRepl){
-        searchinText = dlg.searchGo();
-        qDebug()<<"cop",searchinText;
-    }else{
-        searchinText = dlg.searchAndRepGo();
-        qDebug()<<"rep",searchinText;
-    }
-}
-
 void MainWindow::ruleChengeButton()
 {
     QString g =ui->pushButton->objectName();
@@ -59,5 +46,21 @@ void MainWindow::setInterfaceStyle()
 {
     StyleHelper::setFonts();
     this->setStyleSheet(StyleHelper::getMainStyleLight()); 
+}
+
+
+void MainWindow::on_action_3_triggered()
+{
+    searchWin dlg(this);
+    dlg.exec();
+    if(dlg.back){
+        if(dlg.searchOrRepl){
+           searchinText = dlg.searchGo();
+           qDebug()<<"serch"<<searchinText;
+        }else{
+            searchinText = dlg.searchAndRepGo();
+            qDebug()<<"rep"<<searchinText;
+        }
+    }
 }
 

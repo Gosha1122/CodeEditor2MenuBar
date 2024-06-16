@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "configreader.h"
 #include "stylehelper.h"
+#include "searchwin.h"
 #include "dialog.h"
 #include <QDebug>
 
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
     setInterfaceStyle();
 
+    connect(ui->action,&QMenu::,);
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
 
 }
@@ -28,6 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::searchButtonClicked()
+{
+
 }
 
 void MainWindow::ruleChengeButton()

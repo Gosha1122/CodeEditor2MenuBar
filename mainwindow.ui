@@ -153,6 +153,7 @@
     </property>
     <addaction name="action"/>
     <addaction name="action_2"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menu"/>
   </widget>

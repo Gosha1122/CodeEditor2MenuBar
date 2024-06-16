@@ -29,6 +29,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    QString searchinText;
     void setInterfaceStyle();
 };
 #endif // MAINWINDOW_H

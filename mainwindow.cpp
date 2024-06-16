@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     setInterfaceStyle();
 
-    connect(ui->action,&QMenu::,);
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
 
 }
@@ -34,7 +33,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::searchButtonClicked()
 {
-
+    searchWin dlg(this);
+    dlg.exec();
+    if(dlg.CopyOrRepl){
+        searchinText = dlg.searchGo();
+        qDebug()<<"cop",searchinText;
+    }else{
+        searchinText = dlg.searchAndRepGo();
+        qDebug()<<"rep",searchinText;
+    }
 }
 
 void MainWindow::ruleChengeButton()

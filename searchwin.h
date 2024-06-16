@@ -15,6 +15,12 @@ public:
     explicit searchWin(QWidget *parent = nullptr);
     ~searchWin();
     QString searchGo();
+    QString searchAndRepGo();
+
+    void searchButton();
+    void searchAndRepButton();
+
+    bool CopyOrRepl;
 private:
     Ui::searchWin *ui;
 };

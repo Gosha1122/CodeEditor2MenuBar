@@ -29,6 +29,11 @@ QString searchWin::searchAndRepGo()
     return ui->lineEdit->text();
 }
 
+QString searchWin::replaceGo()
+{
+    return ui->replaceEdit->text();
+}
+
 void searchWin::searchButton()
 {
     back=true;

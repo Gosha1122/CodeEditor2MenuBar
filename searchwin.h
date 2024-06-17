@@ -16,6 +16,7 @@ public:
     ~searchWin();
     QString searchGo();
     QString searchAndRepGo();
+    QString replaceGo();
 
     void searchButton();
     void searchAndRepButton();

@@ -25,12 +25,17 @@ public:
 
 private slots:
     void ruleChengeButton();
-
+    void NewFileMenu();
+    void OpenFileMenu();
+    void SaveCorrectionMenu();
+    void SaveAsCorrectionMenu();
+    void HelpHelpMenu();
+    void HelpQtHelpMenu();
     void on_action_3_triggered();
 
 private:
     Ui::MainWindow *ui;
-
+    void setupMenuBar();
     QString searchinText;
     void setInterfaceStyle();
 };

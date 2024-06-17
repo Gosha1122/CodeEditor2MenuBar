@@ -86,11 +86,13 @@ void MainWindow::on_action_3_triggered()
     dlg.exec();
     if(dlg.back){
         if(dlg.searchOrRepl){
-           searchinText = dlg.searchGo();
-           qDebug()<<"serch"<<searchinText;
+            searchinText = dlg.searchGo();
+            qDebug()<<searchinText<<"serch" ;
         }else{
             searchinText = dlg.searchAndRepGo();
-            qDebug()<<"rep"<<searchinText;
+            replaceText = dlg.replaceGo();
+            qDebug()<<searchinText<<"rep"<<replaceText ;
+
         }
     }
 }

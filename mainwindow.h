@@ -32,10 +32,10 @@ private slots:
     void HelpHelpMenu();
     void HelpQtHelpMenu();
     void on_action_3_triggered();
-
 private:
     Ui::MainWindow *ui;
     void setupMenuBar();
+    QString replaceText;
     QString searchinText;
     void setInterfaceStyle();
 };

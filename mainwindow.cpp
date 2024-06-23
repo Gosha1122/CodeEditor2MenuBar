@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
 
+    setupMenuBar();
 }
 
 
@@ -39,6 +40,36 @@ void MainWindow::ruleChengeButton()
     dlg.exec();
     dlg.getGo();
 
+
+}
+
+void MainWindow::NewFileMenu()
+{
+
+}
+
+void MainWindow::OpenFileMenu()
+{
+
+}
+
+void MainWindow::SaveCorrectionMenu()
+{
+
+}
+
+void MainWindow::SaveAsCorrectionMenu()
+{
+
+}
+
+void MainWindow::HelpHelpMenu()
+{
+
+}
+
+void MainWindow::HelpQtHelpMenu()
+{
 
 }
 
@@ -64,5 +95,21 @@ void MainWindow::on_action_3_triggered()
 
         }
     }
+}
+
+void MainWindow::setupMenuBar()
+{
+    QMenu* File = new QMenu(tr("Файл"), this);
+    ui->menubar->addMenu(File);
+    File->addAction(tr("Новый"), this, &MainWindow::NewFileMenu);
+    File->addAction(tr("Открыть"), this, &MainWindow::OpenFileMenu);
+    QMenu* Correction = new QMenu(tr("Редактировать"), this);
+    ui->menubar->addMenu(Correction);
+    Correction->addAction(tr("Сохранить"), this, &MainWindow::SaveCorrectionMenu);
+    Correction->addAction(tr("Сохранить как"), this, &MainWindow::SaveAsCorrectionMenu);
+    QMenu* Help = new QMenu(tr("Помощь"), this);
+    ui->menubar->addMenu(Help);
+    Help->addAction(tr("Помощь"), this, &MainWindow::HelpHelpMenu);
+    Help->addAction(tr("Помощь от Qt"), this, &MainWindow::HelpQtHelpMenu);
 }
 

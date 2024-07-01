@@ -15,6 +15,7 @@ Dialog::Dialog(QString text,QWidget *parent)
     ui->listWidget->addItem("PlainText");
     ui->listWidget->addItem("QSS");
     connect(ui->listWidget,&QListWidget::itemClicked,this,&Dialog::elListClickSlot);
+    ui->listWidget->setCurrentItem("PlainText");
 }
 
 Dialog::~Dialog()

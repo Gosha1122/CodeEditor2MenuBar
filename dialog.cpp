@@ -17,8 +17,6 @@ Dialog::Dialog(QString text,QString format,QWidget *parent)
     ui->listWidget->addItem("QSS");
     connect(ui->listWidget,&QListWidget::itemClicked,this,&Dialog::elListClickSlot);
 
-   // qDebug()<<ui->listWidget->item(1)->text();
-   // qDebug()<<mN.nameOfFormat;
     for(int i=0;i<ui->listWidget->count();i++){
         if(format == ui->listWidget->item(i)->text() ){
             ui->listWidget->setCurrentItem(ui->listWidget->item(i));

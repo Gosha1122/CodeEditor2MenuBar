@@ -33,7 +33,6 @@ private slots:
     void HelpHelpMenu();
     void HelpQtHelpMenu();
     void on_action_3_triggered();
-    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

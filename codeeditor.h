@@ -2,6 +2,7 @@
 #define CODEEDITOR_H
 
 #include <QPlainTextEdit>
+#include <QSyntaxHighlighter>
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -23,6 +24,10 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
+    QString path;
+    QSyntaxHighlighter* highlighter = nullptr;
+    bool save;
+    bool status;
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
@@ -30,9 +35,10 @@ private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &rect, int dy);
-
+    void setSave();
 private:
     QWidget *lineNumberArea;
+
 };
 
 

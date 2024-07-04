@@ -5,8 +5,11 @@
 #include "searchwin.h"
 #include "dialog.h"
 #include <QDebug>
-
-
+#include <QFileInfo>
+#include <QFile>
+#include <QString>
+#include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,7 +24,12 @@ MainWindow::MainWindow(QWidget *parent)
     }
     setInterfaceStyle();
 
+    ui->tabWidget->setTabsClosable(true);
+    ui->tabWidget->addTab(new CodeEditor, "untitled");
+    ui->tabWidget->addTab(new CodeEditor, "untitled1");
+
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
+
 
     setupMenuBar();
 }
@@ -45,23 +53,54 @@ void MainWindow::ruleChengeButton()
 
 void MainWindow::NewFileMenu()
 {
-
+    ui->tabWidget->addTab(new CodeEditor, "untitled" + QString::number(MainWindow::count));
+    MainWindow::count ++;
 }
 
 void MainWindow::OpenFileMenu()
 {
-
+    QString filepath = QFileDialog::getOpenFileName(this, "Open File", "", "All Files (*.*)");
+    if(!filepath.isEmpty()){
+        QFileInfo info(filepath);
+        QString filename = info.fileName();
+        QFile file(filepath);
+        if(file.open(QIODevice::ReadOnly | QIODevice::Text)){
+            ui->tabWidget->addTab(new CodeEditor, filename);
+            QString text = file.readAll();
+            ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
+            QString suf = info.suffix();
+            CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+            editor->path = filepath;
+            editor->appendPlainText(text);
+            if(suf == "cpp" || suf == "h" || suf == "c" || suf == "hpp"){
+                if(editor->highlighter != nullptr){
+                    delete editor->highlighter;
+                }
+                editor->highlighter = new Highlighter(editor->document());
+            }else if(suf == "json"){
+                if(editor->highlighter != nullptr){
+                    delete editor->highlighter;
+                }
+                editor->highlighter = new HighlighterJSON(editor->document());
+            }else if(suf == "QSS"){
+                if(editor->highlighter != nullptr){
+                    delete editor->highlighter;
+                }
+                editor->highlighter = new HighlighterQSS(editor->document());
+            }else{
+                if(editor->highlighter != nullptr){
+                    delete editor->highlighter;
+                }
+                editor->highlighter = nullptr;
+            }
+            editor->save = false;
+            editor->status = false;
+            file.close();
+        }
+    }
 }
 
-void MainWindow::SaveCorrectionMenu()
-{
 
-}
-
-void MainWindow::SaveAsCorrectionMenu()
-{
-
-}
 
 void MainWindow::HelpHelpMenu()
 {
@@ -97,19 +136,191 @@ void MainWindow::on_action_3_triggered()
     }
 }
 
+void MainWindow::closeFileMenu()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    if(!editor->save){
+        QMessageBox::Button msg;
+        msg = QMessageBox::warning(this,"Закрыть файл", "Cохранить файл перед закрытием?", QMessageBox::Ok|QMessageBox::Cancel, QMessageBox::Ok);
+        if(msg == QMessageBox::Ok){
+            MainWindow::SaveFileMenu();
+        }
+    }
+    delete editor;
+    editor = nullptr;
+}
+
+void MainWindow::SaveFileMenu()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    if(!editor->save){
+        if(!editor->status){
+            QString filepath = QFileDialog::getSaveFileName(this,"Save", "", "");
+
+            QFile file(filepath);
+            QString text = editor->document()->toPlainText();
+            file.open(QIODevice::WriteOnly|QIODevice::Text);
+            file.write(text.toUtf8());
+            file.close();
+
+            QFileInfo inf(filepath);
+            QString filename = inf.fileName();
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), filename);
+
+            editor->save = true;
+            editor->status = true;
+            editor->path = filepath;
+        }else{
+            QFile file(editor->path);
+            QString text = editor->document()->toPlainText();
+            file.open(QIODevice::WriteOnly|QIODevice::Text);
+            file.write(text.toUtf8());
+            file.close();
+        }
+    }
+}
+
+void MainWindow::SaveAtFileMenu()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    QString filepath = QFileDialog::getSaveFileName(this,"Save", "", "");
+    QFile file(filepath);
+    QString text = editor->document()->toPlainText();
+    file.open(QIODevice::WriteOnly|QIODevice::Text);
+    file.write(text.toUtf8());
+    file.close();
+    editor->save = true;
+    editor->path = filepath;
+}
+
+void MainWindow::SaveAllFileMenu()
+{
+    int index = ui->tabWidget->currentIndex();
+    int count = ui->tabWidget->count();
+    for(int i = 0; i < count; i++){
+        ui->tabWidget->setCurrentIndex(i);
+        MainWindow::SaveFileMenu();
+    }
+    ui->tabWidget->setCurrentIndex(index);
+}
+
+void MainWindow::closePrMenu()
+{
+
+}
+
+void MainWindow::UndoMenu()
+{
+
+}
+
+void MainWindow::RedoMenu()
+{
+
+}
+
+void MainWindow::CutMenu()
+{
+
+}
+
+void MainWindow::CopyMenu()
+{
+
+}
+
+void MainWindow::PastMenu()
+{
+
+}
+
+void MainWindow::SelectAllMenu()
+{
+
+}
+
+void MainWindow::addCppColorMenu()
+{
+
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    if(editor->highlighter != nullptr){
+        delete editor->highlighter;
+    }
+    editor->highlighter = new Highlighter(editor->document());
+}
+
+void MainWindow::addJSONColorMenu()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    if(editor->highlighter != nullptr){
+        delete editor->highlighter;
+    }
+    editor->highlighter = new HighlighterJSON(editor->document());
+}
+
+void MainWindow::addQSSColorMenu()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    if(editor->highlighter != nullptr){
+        delete editor->highlighter;
+    }
+    editor->highlighter = new HighlighterQSS(editor->document());
+}
+
+void MainWindow::addPlainTextColorMenu()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    if(editor->highlighter != nullptr){
+        delete editor->highlighter;
+    }
+    editor->highlighter = nullptr;
+}
+
 void MainWindow::setupMenuBar()
 {
     QMenu* File = new QMenu(tr("Файл"), this);
     ui->menubar->addMenu(File);
     File->addAction(tr("Новый"), this, &MainWindow::NewFileMenu);
     File->addAction(tr("Открыть"), this, &MainWindow::OpenFileMenu);
+    File->addAction(tr("Закрыть"), this, &MainWindow::closeFileMenu);
+    File->addAction(tr("Сохранить"), this, &MainWindow::SaveFileMenu);
+    File->addAction(tr("Сохранить как"), this, &MainWindow::SaveAtFileMenu);
+    File->addAction(tr("Сохранить всё"), this, &MainWindow::SaveAllFileMenu);
+    File->addAction(tr("Выйти"), this, &MainWindow::closePrMenu);
     QMenu* Correction = new QMenu(tr("Редактировать"), this);
     ui->menubar->addMenu(Correction);
-    Correction->addAction(tr("Сохранить"), this, &MainWindow::SaveCorrectionMenu);
-    Correction->addAction(tr("Сохранить как"), this, &MainWindow::SaveAsCorrectionMenu);
+    Correction->addAction(tr("Отмена"), this, &MainWindow::UndoMenu);
+    Correction->addAction(tr("Вернуть"), this, &MainWindow::RedoMenu);
+    Correction->addAction(tr("Вырезать"), this, &MainWindow::CutMenu);
+    Correction->addAction(tr("Копировать"), this, &MainWindow::CopyMenu);
+    Correction->addAction(tr("Вставить"), this, &MainWindow::PastMenu);
+    Correction->addAction(tr("Выделить всё"), this, &MainWindow::SelectAllMenu);
     QMenu* Help = new QMenu(tr("Помощь"), this);
     ui->menubar->addMenu(Help);
     Help->addAction(tr("Помощь"), this, &MainWindow::HelpHelpMenu);
     Help->addAction(tr("Помощь от Qt"), this, &MainWindow::HelpQtHelpMenu);
+    QMenu* Color = new QMenu(tr("Подсветка"), this);
+    ui->menubar->addMenu(Color);
+    Color->addAction(tr("C++"), this, &MainWindow::addCppColorMenu);
+    Color->addAction(tr("JSON"), this, &MainWindow::addJSONColorMenu);
+    Color->addAction(tr("QSS"), this, &MainWindow::addQSSColorMenu);
+    Color->addAction(tr("PlainText"), this, &MainWindow::addPlainTextColorMenu);
+}
+
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(index));
+    if(!editor->save){
+        QMessageBox::Button msg;
+        msg = QMessageBox::warning(this,"Закрыть файл", "Cохранить файл перед закрытием?", QMessageBox::Ok|QMessageBox::Cancel, QMessageBox::Ok);
+        if(msg == QMessageBox::Ok){
+            ui->tabWidget->setCurrentIndex(index);
+            MainWindow::SaveFileMenu();
+        }
+    }
+    ui->tabWidget->removeTab(index);
+    delete editor;
+    editor = nullptr;
 }
 

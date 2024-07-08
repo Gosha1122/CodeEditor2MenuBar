@@ -2,7 +2,8 @@
 #include "ui_dialog.h"
 #include <QDebug>
 
-Dialog::Dialog(QString text,QWidget *parent)
+
+Dialog::Dialog(QString text,QString format,QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Dialog)
 {
@@ -15,6 +16,17 @@ Dialog::Dialog(QString text,QWidget *parent)
     ui->listWidget->addItem("PlainText");
     ui->listWidget->addItem("QSS");
     connect(ui->listWidget,&QListWidget::itemClicked,this,&Dialog::elListClickSlot);
+
+    for(int i=0;i<ui->listWidget->count();i++){
+        if(format == ui->listWidget->item(i)->text() ){
+            ui->listWidget->setCurrentItem(ui->listWidget->item(i));
+            qDebug()<<"talalala";
+        }
+        qDebug()<<i;
+    }
+
+
+
 }
 
 Dialog::~Dialog()

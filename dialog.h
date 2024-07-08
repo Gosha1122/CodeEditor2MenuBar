@@ -12,7 +12,7 @@ class Dialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit Dialog(QString text,QWidget *parent = nullptr);
+    explicit Dialog(QString text,QString format,QWidget *parent = nullptr);
     ~Dialog();
     int index;
     QString getGo();

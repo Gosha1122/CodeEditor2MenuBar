@@ -42,11 +42,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::ruleChengeButton()
 {
+
     QString g =ui->pushButton->objectName();
-    Dialog dlg(g,this);
+    QString n =ui->pushButton->text();
+    Dialog dlg(g,n,this);
     qDebug() << "ff";
+
+
     dlg.exec();
-    dlg.getGo();
+    QString name =dlg.getGo();
+
+    qDebug()<<"f";
+    ui->pushButton->setText(name);
 
 
 }

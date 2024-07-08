@@ -24,6 +24,7 @@ public:
     int count = 2;
 
 
+
 private slots:
     void ruleChengeButton();
     void NewFileMenu();
@@ -47,6 +48,7 @@ private slots:
     void addQSSColorMenu();
     void addPlainTextColorMenu();
     void on_tabWidget_tabCloseRequested(int index);
+
 
 private:
     Ui::MainWindow *ui;

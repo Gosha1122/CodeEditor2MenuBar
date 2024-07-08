@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    int count = 2;
 
 
 
@@ -28,11 +29,26 @@ private slots:
     void ruleChengeButton();
     void NewFileMenu();
     void OpenFileMenu();
-    void SaveCorrectionMenu();
-    void SaveAsCorrectionMenu();
     void HelpHelpMenu();
     void HelpQtHelpMenu();
     void on_action_3_triggered();
+    void closeFileMenu();
+    void SaveFileMenu();
+    void SaveAtFileMenu();
+    void SaveAllFileMenu();
+    void closePrMenu();
+    void UndoMenu();
+    void RedoMenu();
+    void CutMenu();
+    void CopyMenu();
+    void PastMenu();
+    void SelectAllMenu();
+    void addCppColorMenu();
+    void addJSONColorMenu();
+    void addQSSColorMenu();
+    void addPlainTextColorMenu();
+    void on_tabWidget_tabCloseRequested(int index);
+
 
 private:
     Ui::MainWindow *ui;

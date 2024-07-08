@@ -79,13 +79,23 @@ Highlighter::Highlighter(QTextDocument *parent)
 //! [1]
 
 //! [2]
-    classFormat.setFontWeight(QFont::Bold);
-    classFormat.setForeground(Qt::darkMagenta);
-    rule.pattern = QRegularExpression(QStringLiteral("\\b(Q[A-Za-z]+|string|istream|ofstream|ifstream|failure|std)\\b"));
-    rule.format = classFormat;
+    classFormatQ.setFontWeight(QFont::Bold);
+    classFormatQ.setForeground(Qt::darkMagenta);
+    rule.pattern = QRegularExpression(QStringLiteral("\\bQ[A-Za-z]+\\b"));
+    rule.format = classFormatQ;
     highlightingRules.append(rule);
 //! [2]
-
+    classFormat.setFontWeight(QFont::Bold);
+    classFormat.setForeground(Qt::darkMagenta);
+    const QString classPatterns[] = {
+        QStringLiteral("\\bstring\\b"), QStringLiteral("\\bfstream\\b"), QStringLiteral("\\bofstream\\b"), QStringLiteral("\\bifstream\\b"), QStringLiteral("\\failure\\b"),
+        QStringLiteral("\\bstd\\b")
+    };
+    for (const QString &pattern : classPatterns) {
+        rule.pattern = QRegularExpression(pattern);
+        rule.format = classFormat;
+        highlightingRules.append(rule);
+    }
 //! [3]
     singleLineCommentFormat.setForeground(Qt::red);
     rule.pattern = QRegularExpression(QStringLiteral("(//[^\n]*|<.*>)"));
@@ -113,7 +123,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 //! [6]
     commentStartExpression = QRegularExpression(QStringLiteral("/\\*"));
     commentEndExpression = QRegularExpression(QStringLiteral("\\*/"));
-}
+    }
 //! [6]
 
 //! [7]
@@ -126,18 +136,18 @@ void Highlighter::highlightBlock(const QString &text)
             setFormat(match.capturedStart(), match.capturedLength(), rule.format);
         }
     }
-//! [7] //! [8]
+    //! [7] //! [8]
     setCurrentBlockState(0);
-//! [8]
+    //! [8]
 
-//! [9]
+    //! [9]
     int startIndex = 0;
     if (previousBlockState() != 1)
         startIndex = text.indexOf(commentStartExpression);
 
-//! [9] //! [10]
+    //! [9] //! [10]
     while (startIndex >= 0) {
-//! [10] //! [11]
+        //! [10] //! [11]
         QRegularExpressionMatch match = commentEndExpression.match(text, startIndex);
         int endIndex = match.capturedStart();
         int commentLength = 0;

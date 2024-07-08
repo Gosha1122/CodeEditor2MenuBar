@@ -1,5 +1,5 @@
 #include "codeeditor.h"
-
+#include <QDebug>
 #include <QPainter>
 #include <QTextBlock>
 
@@ -12,6 +12,7 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+    connect(this, &CodeEditor::textChanged, this, &CodeEditor::setSave);
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
@@ -53,6 +54,11 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 
     if (rect.contains(viewport()->rect()))
         updateLineNumberAreaWidth(0);
+}
+
+void CodeEditor::setSave()
+{
+    save = false;
 }
 
 

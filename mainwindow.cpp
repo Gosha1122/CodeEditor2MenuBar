@@ -163,7 +163,8 @@ void MainWindow::SaveFileMenu()
     if(!editor->save){
         if(!editor->status){
             QString filepath = QFileDialog::getSaveFileName(this,"Save", "", "");
-
+            if(filepath.isEmpty())
+                return;
             QFile file(filepath);
             QString text = editor->document()->toPlainText();
             file.open(QIODevice::WriteOnly|QIODevice::Text);

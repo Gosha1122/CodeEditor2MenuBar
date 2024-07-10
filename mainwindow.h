@@ -5,6 +5,7 @@
 #include "highlighter.h"
 #include "highlighterQss.h"
 #include "highlighterJson.h"
+#include "treefileswidget.h"
 
 #include "codeeditor.h"
 
@@ -56,6 +57,7 @@ private:
     QString replaceText;
     QString searchinText;
     void setInterfaceStyle();
+    TreeFilesWidget *treeFilesWidget;
 
 };
 #endif // MAINWINDOW_H

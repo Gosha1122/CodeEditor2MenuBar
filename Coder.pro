@@ -19,7 +19,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     searchwin.cpp \
-    stylehelper.cpp
+    stylehelper.cpp \
+    treefileswidget.cpp
 
 HEADERS += \
     codeeditor.h \
@@ -31,12 +32,14 @@ HEADERS += \
     highlighterQss.h \
     mainwindow.h \
     searchwin.h \
-    stylehelper.h
+    stylehelper.h \
+    treefileswidget.h
 
 FORMS += \
     dialog.ui \
     mainwindow.ui \
-    searchwin.ui
+    searchwin.ui \
+    treefileswidget.ui
 
 DISTFILES += \
     default.conf

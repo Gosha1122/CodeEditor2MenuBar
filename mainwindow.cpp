@@ -10,6 +10,7 @@
 #include <QString>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     setupMenuBar();
+    treeFilesWidget = new TreeFilesWidget;
+    QVBoxLayout* box = new QVBoxLayout;
+    ui->leftWidget->setLayout(box);
+    box->addWidget(treeFilesWidget);
 }
 
 

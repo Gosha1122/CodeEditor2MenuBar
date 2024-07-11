@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
 
+    StyleHelper();
 
     setupMenuBar();
     treeFilesWidget = new TreeFilesWidget;
@@ -335,5 +336,47 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
     delete editor;
     editor = nullptr;
+}
+
+void MainWindow::StyleHelper()
+{
+    ui->tabWidget->setStyleSheet("QTabBar::tab{"
+                                 "border: 4px solid #cccccc;"
+                                 "border-top-left-radius: 7px;"
+                                 "border-top-right-radius: 7px;"
+                                 "background-color: #cccccc;"
+                                 "padding-left: 10px;"
+                                 "margin-left: 3px;"
+                                 "}"
+                                 "QTabBar::tab:hover{"
+                                 "background-color: #eeeedd;"
+                                 "border-color: #eeeedd;"
+                                 "}"
+                                 "QTabBar::tab:selected{"
+                                 "background-color: #ffffff;"
+                                 "border-color: #ffffff;"
+                                 "}"
+                                 "QTabWidget::pane{"
+                                 "margin-color: #cccccc;"
+                                 "}");
+    ui->tabWidget_2->setStyleSheet("QTabBar::tab{"
+                                   "border: 4px solid #cccccc;"
+                                   "border-top-left-radius: 7px;"
+                                   "border-top-right-radius: 7px;"
+                                   "background-color: #cccccc;"
+                                   "padding-left: 10px;"
+                                   "margin-left: 3px;"
+                                   "}"
+                                   "QTabBar::tab:hover{"
+                                   "background-color: #eeeedd;"
+                                   "border-color: #eeeedd;"
+                                   "}"
+                                   "QTabBar::tab:selected{"
+                                   "background-color: #ffffff;"
+                                   "border-color: #ffffff;"
+                                   "}"
+                                   "QTabWidget::pane{"
+                                   "margin-color: #cccccc;"
+                                   "}");
 }
 

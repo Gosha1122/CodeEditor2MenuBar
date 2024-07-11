@@ -49,7 +49,7 @@ private slots:
     void addQSSColorMenu();
     void addPlainTextColorMenu();
     void on_tabWidget_tabCloseRequested(int index);
-
+    void StyleHelper();
 
 private:
     Ui::MainWindow *ui;

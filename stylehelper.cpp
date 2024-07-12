@@ -21,3 +21,57 @@ QString StyleHelper::getMainStyleLight()
            "font-size:12px;"
            "}";
 }
+
+QString StyleHelper::StyleHelperTabWidget(int status)
+{
+    QString Style;
+    if(status == 0){
+        Style = "QTabBar::tab{"
+                "border: 4px solid #cccccc;"
+                "border-top-left-radius: 7px;"
+                "border-top-right-radius: 7px;"
+                "background-color: #cccccc;"
+                "padding-left: 10px;"
+                "margin-left: 3px;"
+                "}"
+                "QTabBar::tab:hover{"
+                "background-color: #eeeedd;"
+                "border-color: #eeeedd;"
+                "}"
+                "QTabBar::tab:selected{"
+                "background-color: #ffffff;"
+                "border-color: #ffffff;"
+                "}"
+                "QTabWidget::pane{"
+                "}"
+                "QTabBar::close-button{"
+                "image: url(:/images/close-btn2.png);"
+                "}"
+                "QTabBar::close-button:hover{"
+                "image: url(:/images/close-btn.png)"
+                "}";
+    }else if(status == 1){
+        Style = "QTabBar::tab{"
+                "border: 4px solid #cccccc;"
+                "border-top-left-radius: 7px;"
+                "border-top-right-radius: 7px;"
+                "background-color: #cccccc;"
+                "padding-left: 10px;"
+                "margin-left: 3px;"
+                "}"
+                "QTabBar::tab:hover{"
+                "background-color: #eeeedd;"
+                "border-color: #eeeedd;"
+                "}"
+                "QTabBar::tab:selected{"
+                "background-color: #ffffff;"
+                "border-color: #ffffff;"
+                "}"
+                "QTabWidget::pane{"
+                "}"
+                "QTabBar::close-button{"
+                "image: url(:/images/close-btn3.png);"
+                "}";
+    }
+    return Style;
+}

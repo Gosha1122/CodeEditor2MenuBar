@@ -23,7 +23,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     int count = 2;
-
+    bool eventFilter(QObject *target, QEvent *event);
 
 
 private slots:
@@ -49,7 +49,7 @@ private slots:
     void addQSSColorMenu();
     void addPlainTextColorMenu();
     void on_tabWidget_tabCloseRequested(int index);
-    void StyleHelper();
+    void StyleHelper(int status);
 
 private:
     Ui::MainWindow *ui;

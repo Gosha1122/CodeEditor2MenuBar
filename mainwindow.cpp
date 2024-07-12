@@ -31,7 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
 
-    StyleHelper();
+    ui->tabWidget->tabBar()->installEventFilter(this);
+
+    StyleHelper(0);
 
     setupMenuBar();
     treeFilesWidget = new TreeFilesWidget;
@@ -44,6 +46,24 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+bool MainWindow::eventFilter(QObject *target, QEvent *event)
+{
+    if (target == ui->tabWidget->tabBar() ) {
+
+        if  (event->type() == QEvent::HoverLeave) {
+            qDebug()<<"Мышка ушла";
+            StyleHelper(1);
+
+        } else if (event->type() == QEvent::HoverEnter) {
+
+            qDebug()<<"Мышка пришла";
+            StyleHelper(0);
+
+        }
+    }
+    return QWidget::eventFilter(target, event);
 }
 
 void MainWindow::ruleChengeButton()
@@ -338,45 +358,58 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     editor = nullptr;
 }
 
-void MainWindow::StyleHelper()
+void MainWindow::StyleHelper(int status)
 {
-    ui->tabWidget->setStyleSheet("QTabBar::tab{"
-                                 "border: 4px solid #cccccc;"
-                                 "border-top-left-radius: 7px;"
-                                 "border-top-right-radius: 7px;"
-                                 "background-color: #cccccc;"
-                                 "padding-left: 10px;"
-                                 "margin-left: 3px;"
-                                 "}"
-                                 "QTabBar::tab:hover{"
-                                 "background-color: #eeeedd;"
-                                 "border-color: #eeeedd;"
-                                 "}"
-                                 "QTabBar::tab:selected{"
-                                 "background-color: #ffffff;"
-                                 "border-color: #ffffff;"
-                                 "}"
-                                 "QTabWidget::pane{"
-                                 "margin-color: #cccccc;"
-                                 "}");
-    ui->tabWidget_2->setStyleSheet("QTabBar::tab{"
-                                   "border: 4px solid #cccccc;"
-                                   "border-top-left-radius: 7px;"
-                                   "border-top-right-radius: 7px;"
-                                   "background-color: #cccccc;"
-                                   "padding-left: 10px;"
-                                   "margin-left: 3px;"
-                                   "}"
-                                   "QTabBar::tab:hover{"
-                                   "background-color: #eeeedd;"
-                                   "border-color: #eeeedd;"
-                                   "}"
-                                   "QTabBar::tab:selected{"
-                                   "background-color: #ffffff;"
-                                   "border-color: #ffffff;"
-                                   "}"
-                                   "QTabWidget::pane{"
-                                   "margin-color: #cccccc;"
-                                   "}");
+    QString Style;
+    if(status == 0){
+        Style = "QTabBar::tab{"
+                "border: 4px solid #cccccc;"
+                "border-top-left-radius: 7px;"
+                "border-top-right-radius: 7px;"
+                "background-color: #cccccc;"
+                "padding-left: 10px;"
+                "margin-left: 3px;"
+                "}"
+                "QTabBar::tab:hover{"
+                "background-color: #eeeedd;"
+                "border-color: #eeeedd;"
+                "}"
+                "QTabBar::tab:selected{"
+                "background-color: #ffffff;"
+                "border-color: #ffffff;"
+                "}"
+                "QTabWidget::pane{"
+                "}"
+                "QTabBar::close-button{"
+                "image: url(:/images/close-btn2.png);"
+                "}"
+                "QTabBar::close-button:hover{"
+                "image: url(:/images/close-btn.png)"
+                "}";
+    }else if(status == 1){
+        Style = "QTabBar::tab{"
+                "border: 4px solid #cccccc;"
+                "border-top-left-radius: 7px;"
+                "border-top-right-radius: 7px;"
+                "background-color: #cccccc;"
+                "padding-left: 10px;"
+                "margin-left: 3px;"
+                "}"
+                "QTabBar::tab:hover{"
+                "background-color: #eeeedd;"
+                "border-color: #eeeedd;"
+                "}"
+                "QTabBar::tab:selected{"
+                "background-color: #ffffff;"
+                "border-color: #ffffff;"
+                "}"
+                "QTabWidget::pane{"
+                "}"
+                "QTabBar::close-button{"
+                "image: url(:/images/close-btn3.png);"
+                "}";
+    }
+    ui->tabWidget->setStyleSheet(Style);
+    ui->tabWidget_2->setStyleSheet(Style);
 }
 

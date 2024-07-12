@@ -7,7 +7,8 @@ class StyleHelper
 public:
     //...
     static void setFonts();
-    static QString getMainStyleLight();
+    static QString getMainStyleLight();\
+    static QString StyleHelperTabWidget(int status);
 };
 
 #endif // STYLEHELPER_H

@@ -11,7 +11,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QVBoxLayout>
-
+//fffff
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -31,6 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
 
+    ui->tabWidget->tabBar()->installEventFilter(this);
+
+    StyleHelper(0);
 
     setupMenuBar();
     treeFilesWidget = new TreeFilesWidget;
@@ -43,6 +46,24 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+bool MainWindow::eventFilter(QObject *target, QEvent *event)
+{
+    if (target == ui->tabWidget->tabBar() ) {
+
+        if  (event->type() == QEvent::HoverLeave) {
+            qDebug()<<"Мышка ушла";
+            StyleHelper(1);
+
+        } else if (event->type() == QEvent::HoverEnter) {
+
+            qDebug()<<"Мышка пришла";
+            StyleHelper(0);
+
+        }
+    }
+    return QWidget::eventFilter(target, event);
 }
 
 void MainWindow::ruleChengeButton()
@@ -326,14 +347,72 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(index));
     if(!editor->save){
         QMessageBox::Button msg;
-        msg = QMessageBox::warning(this,"Закрыть файл", "Cохранить файл перед закрытием?", QMessageBox::Ok|QMessageBox::Cancel, QMessageBox::Ok);
+        msg = QMessageBox::warning(this,"Закрыть файл", "Cохранить файл перед закрытием?", QMessageBox::Ok|QMessageBox::No|QMessageBox::Cancel, QMessageBox::Ok);
         if(msg == QMessageBox::Ok){
             ui->tabWidget->setCurrentIndex(index);
             MainWindow::SaveFileMenu();
+        }else if(msg == QMessageBox::No){
+        }else{
+            return;
         }
     }
     ui->tabWidget->removeTab(index);
     delete editor;
     editor = nullptr;
+}
+
+void MainWindow::StyleHelper(int status)
+{
+    QString Style;
+    if(status == 0){
+        Style = "QTabBar::tab{"
+                "border: 4px solid #cccccc;"
+                "border-top-left-radius: 7px;"
+                "border-top-right-radius: 7px;"
+                "background-color: #cccccc;"
+                "padding-left: 10px;"
+                "margin-left: 3px;"
+                "}"
+                "QTabBar::tab:hover{"
+                "background-color: #eeeedd;"
+                "border-color: #eeeedd;"
+                "}"
+                "QTabBar::tab:selected{"
+                "background-color: #ffffff;"
+                "border-color: #ffffff;"
+                "}"
+                "QTabWidget::pane{"
+                "}"
+                "QTabBar::close-button{"
+                "image: url(:/images/close-btn2.png);"
+                "}"
+                "QTabBar::close-button:hover{"
+                "image: url(:/images/close-btn.png)"
+                "}";
+    }else if(status == 1){
+        Style = "QTabBar::tab{"
+                "border: 4px solid #cccccc;"
+                "border-top-left-radius: 7px;"
+                "border-top-right-radius: 7px;"
+                "background-color: #cccccc;"
+                "padding-left: 10px;"
+                "margin-left: 3px;"
+                "}"
+                "QTabBar::tab:hover{"
+                "background-color: #eeeedd;"
+                "border-color: #eeeedd;"
+                "}"
+                "QTabBar::tab:selected{"
+                "background-color: #ffffff;"
+                "border-color: #ffffff;"
+                "}"
+                "QTabWidget::pane{"
+                "}"
+                "QTabBar::close-button{"
+                "image: url(:/images/close-btn3.png);"
+                "}";
+    }
+    ui->tabWidget->setStyleSheet(Style);
+    ui->tabWidget_2->setStyleSheet(Style);
 }
 

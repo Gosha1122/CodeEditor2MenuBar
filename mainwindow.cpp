@@ -11,7 +11,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QVBoxLayout>
-
+//fffff
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)

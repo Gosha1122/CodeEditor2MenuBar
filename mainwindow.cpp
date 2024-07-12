@@ -347,10 +347,14 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(index));
     if(!editor->save){
         QMessageBox::Button msg;
-        msg = QMessageBox::warning(this,"Закрыть файл", "Cохранить файл перед закрытием?", QMessageBox::Ok|QMessageBox::Cancel, QMessageBox::Ok);
+        msg = QMessageBox::warning(this,"Закрыть файл", "Cохранить файл перед закрытием?", QMessageBox::Ok|QMessageBox::No|QMessageBox::Cancel, QMessageBox::Ok);
         if(msg == QMessageBox::Ok){
             ui->tabWidget->setCurrentIndex(index);
             MainWindow::SaveFileMenu();
+        }else if(msg == QMessageBox::No){
+
+        }else{
+            return;
         }
     }
     ui->tabWidget->removeTab(index);

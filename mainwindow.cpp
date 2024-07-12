@@ -352,7 +352,6 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
             ui->tabWidget->setCurrentIndex(index);
             MainWindow::SaveFileMenu();
         }else if(msg == QMessageBox::No){
-
         }else{
             return;
         }

@@ -45,7 +45,7 @@ QString StyleHelper::StyleHelperTabWidget(int status)
                 "QTabWidget::pane{"
                 "}"
                 "QTabBar::close-button{"
-                "image: url(:/images/close-btn2.png);"
+                "image: url(:/images/close-btn3.png);"
                 "}"
                 "QTabBar::close-button:hover{"
                 "image: url(:/images/close-btn.png)"
@@ -70,7 +70,7 @@ QString StyleHelper::StyleHelperTabWidget(int status)
                 "QTabWidget::pane{"
                 "}"
                 "QTabBar::close-button{"
-                "image: url(:/images/close-btn3.png);"
+                "image: none;"
                 "}";
     }
     return Style;

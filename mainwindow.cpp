@@ -48,7 +48,12 @@ MainWindow::MainWindow(QWidget *parent)
     treeFilesWidget = new TreeFilesWidget;
     QVBoxLayout* box = new QVBoxLayout;
     ui->leftWidget->setLayout(box);
+    box->setContentsMargins(0,0,0,0);
     box->addWidget(treeFilesWidget);
+
+    ui->tabWidget_2->hide();
+    ui->fileInfoLabel->clear();
+    ui->pathLabel->clear();
 }
 
 
@@ -92,9 +97,6 @@ void MainWindow::ruleChengeButton()
         addQSSColorMenu();
     else if(name=="QSS")
         addQSSColorMenu();
-
-
-
 }
 
 void MainWindow::NewFileMenu()
@@ -146,6 +148,8 @@ void MainWindow::OpenFileMenu()
             editor->save = false;
             editor->status = false;
             file.close();
+            setFileInfo(filepath);
+            setFilePathLabel(filepath);
         }
     }
 }
@@ -166,6 +170,34 @@ void MainWindow::setInterfaceStyle()
 {
     StyleHelper::setFonts();
     this->setStyleSheet(StyleHelper::getMainStyleLight()); 
+}
+
+void MainWindow::setFileInfo(QString fname)
+{
+    QFileInfo info(fname);
+    int size = info.size();
+    int d = size % 10;
+    QString byteWord;
+    if(size > 11 && size <= 20){
+        byteWord = " байтов";
+    }else if(d == 1){
+        byteWord = " байт";
+    }else if(d > 1 && d < 5){
+        byteWord = " байта";
+    }else{
+        byteWord = " байтов";
+    }
+    ui->fileInfoLabel->setText(QString::number(size) + byteWord);
+}
+
+void MainWindow::setFilePathLabel(QString fname)
+{
+    if(fname.size() > 100){
+        int pos  = fname.size() / 2;
+        int len = fname.size() - 100;
+        fname.replace(pos,len,"...");
+    }
+    ui->pathLabel->setText(fname);
 }
 
 
@@ -393,6 +425,3 @@ void MainWindow::addZVTabWidget(int index)
     }
 
 }
-
-
-

@@ -58,6 +58,9 @@ private:
     QString searchinText;
     void setInterfaceStyle();
     TreeFilesWidget *treeFilesWidget;
+    void setFileInfo(QString fname);
+    void setFilePathLabel(QString fname);
 
 };
+
 #endif // MAINWINDOW_H

@@ -10,7 +10,7 @@ Dialog::Dialog(QString text,QString format,QWidget *parent)
     ui->setupUi(this);
     QDialog::setWindowTitle (text );
     ui->listWidget->addItem("C++");
-    ui->listWidget->addItem("JavaScript");
+    ui->listWidget->addItem("JSON");
     ui->listWidget->addItem("HTML");
     ui->listWidget->addItem("CSS");
     ui->listWidget->addItem("PlainText");
@@ -20,7 +20,6 @@ Dialog::Dialog(QString text,QString format,QWidget *parent)
     for(int i=0;i<ui->listWidget->count();i++){
         if(format == ui->listWidget->item(i)->text() ){
             ui->listWidget->setCurrentItem(ui->listWidget->item(i));
-            qDebug()<<"talalala";
         }
         qDebug()<<i;
     }
@@ -36,10 +35,7 @@ Dialog::~Dialog()
 
 QString Dialog::getGo()
 {
-
-    go.append(ui->listWidget->currentItem()->text());
-    qDebug()<<go;
-    return go;
+    return ui->listWidget->currentItem()->text();
 }
 
 void Dialog::elListClickSlot()

@@ -67,20 +67,25 @@ bool MainWindow::eventFilter(QObject *target, QEvent *event)
     return QWidget::eventFilter(target, event);
 }
 
+//Переключение стилей.
 void MainWindow::ruleChengeButton()
 {
-
     QString g =ui->pushButton->objectName();
     QString n =ui->pushButton->text();
     Dialog dlg(g,n,this);
-    qDebug() << "ff";
-
-
     dlg.exec();
     QString name =dlg.getGo();
-
-    qDebug()<<"f";
+    qDebug() << name;
     ui->pushButton->setText(name);
+    if(name=="C++")
+        addCppColorMenu();
+    else if(name=="JSON")
+        addJSONColorMenu();
+    else if(name=="CSS")
+        addQSSColorMenu();
+    else if(name=="QSS")
+        addQSSColorMenu();
+
 
 
 }
@@ -276,7 +281,7 @@ void MainWindow::SelectAllMenu()
 
 void MainWindow::addCppColorMenu()
 {
-
+    qDebug() << "addCppColorMenu";
     CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
     if(editor->highlighter != nullptr){
         delete editor->highlighter;

@@ -30,9 +30,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->tabWidget->setTabsClosable(true);
     ui->tabWidget->addTab(new CodeEditor, "untitled");
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(ui->tabWidget->count() - 1));
+    connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
     ui->tabWidget->addTab(new CodeEditor, "untitled1");
+    editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(ui->tabWidget->count() - 1));
+    connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
 
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
+
 
     ui->tabWidget->tabBar()->installEventFilter(this);
 
@@ -89,6 +96,9 @@ void MainWindow::NewFileMenu()
 {
     ui->tabWidget->addTab(new CodeEditor, "untitled" + QString::number(MainWindow::count));
     MainWindow::count ++;
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(ui->tabWidget->count() - 1));
+    connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
 }
 
 void MainWindow::OpenFileMenu()
@@ -104,6 +114,7 @@ void MainWindow::OpenFileMenu()
             ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
             QString suf = info.suffix();
             CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+            connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
             editor->path = filepath;
             editor->appendPlainText(text);
             if(suf == "cpp" || suf == "h" || suf == "c" || suf == "hpp"){
@@ -211,6 +222,7 @@ void MainWindow::SaveFileMenu()
             file.open(QIODevice::WriteOnly|QIODevice::Text);
             file.write(text.toUtf8());
             file.close();
+
         }
     }
 }
@@ -360,6 +372,21 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
     delete editor;
     editor = nullptr;
+}
+
+void MainWindow::setSave()
+{
+    if(ui->tabWidget->tabText(ui->tabWidget->currentIndex())[ui->tabWidget->tabText(ui->tabWidget->currentIndex()).length() - 1] != "*"){
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), ui->tabWidget->tabText(ui->tabWidget->currentIndex()) + "*");
+    }
+}
+
+void MainWindow::addZVTabWidget(int index)
+{
+    if(ui->tabWidget->tabText(index)[ui->tabWidget->tabText(index).length() - 1] == '*'){
+        ui->tabWidget->setTabText(index, ui->tabWidget->tabText(index).chopped(ui->tabWidget->tabText(index).length() - 2));
+    }
+
 }
 
 

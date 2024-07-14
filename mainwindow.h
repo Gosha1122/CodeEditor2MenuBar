@@ -25,7 +25,6 @@ public:
     int count = 2;
     bool eventFilter(QObject *target, QEvent *event);
 
-
 private slots:
     void ruleChengeButton();
     void NewFileMenu();
@@ -49,6 +48,8 @@ private slots:
     void addQSSColorMenu();
     void addPlainTextColorMenu();
     void on_tabWidget_tabCloseRequested(int index);
+    void setSave();
+    void addZVTabWidget(int index);
 
 private:
     Ui::MainWindow *ui;

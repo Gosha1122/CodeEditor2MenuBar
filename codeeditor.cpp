@@ -59,6 +59,7 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 void CodeEditor::setSave()
 {
     save = false;
+    emit setSavePered();
 }
 
 
@@ -119,5 +120,4 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         ++blockNumber;
     }
 }
-
 

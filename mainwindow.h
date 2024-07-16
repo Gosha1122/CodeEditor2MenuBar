@@ -50,6 +50,10 @@ private slots:
     void on_tabWidget_tabCloseRequested(int index);
     void setSave();
     void addZVTabWidget(int index);
+    void setCoderMenuBarUTF8();
+    void setCoderMenuBarIBM866();
+    void setCoderMenuBarWindows_1251();
+    void setCodirLabel(int index);
 
 private:
     Ui::MainWindow *ui;

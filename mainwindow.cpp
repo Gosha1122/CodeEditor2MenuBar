@@ -154,7 +154,7 @@ void MainWindow::OpenFileMenu()
                 editor->highlighter = nullptr;
             }
             editor->save = false;
-            editor->status = false;
+            editor->status = true;
             file.close();
             setFileInfo(filepath);
             setFilePathLabel(filepath);
@@ -491,13 +491,10 @@ void MainWindow::setCoderMenuBarUTF8()
     QTextCodec *codec;
     codec = QTextCodec::codecForName("UTF8");
     QByteArray encodedString;
-    if(!editor->save){
-        encodedString = codec->fromUnicode(editor->document()->toPlainText());
-    }else{
-        encodedString = codec->fromUnicode(editor->encodedStr);
-    }
+    encodedString = codec->fromUnicode(editor->encodedStr);
     editor->setPlainText(encodedString);
     editor->save = true;
+    MainWindow::addZVTabWidget(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::setCoderMenuBarIBM866()
@@ -509,11 +506,7 @@ void MainWindow::setCoderMenuBarIBM866()
     QTextCodec *codec;
     codec = QTextCodec::codecForName("IBM866");
     QByteArray encodedString;
-    if(!editor->save){
-        encodedString = codec->fromUnicode(editor->document()->toPlainText());
-    }else{
-        encodedString = codec->fromUnicode(editor->encodedStr);
-    }
+    encodedString = codec->fromUnicode(editor->encodedStr);
     editor->setPlainText(encodedString);
     editor->save = true;
     MainWindow::addZVTabWidget(ui->tabWidget->currentIndex());
@@ -527,13 +520,10 @@ void MainWindow::setCoderMenuBarWindows_1251()
     QTextCodec *codec;
     QByteArray encodedString;
     codec = QTextCodec::codecForName("Windows-1251");
-    if(!editor->save){
-        encodedString = codec->fromUnicode(editor->document()->toPlainText());
-    }else{
-        encodedString = codec->fromUnicode(editor->encodedStr);
-    }
+    encodedString = codec->fromUnicode(editor->encodedStr);
     editor->setPlainText(encodedString);
     editor->save = true;
+    MainWindow::addZVTabWidget(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::setCodirLabel(int index)

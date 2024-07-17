@@ -11,7 +11,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QVBoxLayout>
-//fffff
+#include <QTextCodec>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -29,20 +30,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget_2->setStyleSheet(StyleHelper::StyleHelperTabWidget(1));
 
     ui->tabWidget->setTabsClosable(true);
-    ui->tabWidget->addTab(new CodeEditor, "untitled");
+    ui->tabWidget->addTab(new CodeEditor, "untitled ");
     CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(ui->tabWidget->count() - 1));
     connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
-    ui->tabWidget->addTab(new CodeEditor, "untitled1");
+    ui->tabWidget->addTab(new CodeEditor, "untitled1 ");
     editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(ui->tabWidget->count() - 1));
     connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
 
     connect(ui->pushButton,&QPushButton::clicked,this,&MainWindow::ruleChengeButton);
-
+    connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::setCodirLabel);
 
     ui->tabWidget->tabBar()->installEventFilter(this);
-
+    ui->pushButton_2->setText("UTF8");
 
     setupMenuBar();
     treeFilesWidget = new TreeFilesWidget;
@@ -101,9 +102,10 @@ void MainWindow::ruleChengeButton()
 
 void MainWindow::NewFileMenu()
 {
-    ui->tabWidget->addTab(new CodeEditor, "untitled" + QString::number(MainWindow::count));
+    ui->tabWidget->addTab(new CodeEditor, "untitled" + QString::number(MainWindow::count) + " ");
     MainWindow::count ++;
-    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(ui->tabWidget->count() - 1));
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
     connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
 }
@@ -118,12 +120,18 @@ void MainWindow::OpenFileMenu()
         if(file.open(QIODevice::ReadOnly | QIODevice::Text)){
             ui->tabWidget->addTab(new CodeEditor, filename);
             QString text = file.readAll();
+
+            QTextCodec *codec = QTextCodec::codecForName("UTF8");
+            QByteArray encodedString = codec->fromUnicode(text);
+
+
             ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
             QString suf = info.suffix();
             CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
             connect(editor, &CodeEditor::setSavePered, this, &MainWindow::setSave);
             editor->path = filepath;
-            editor->appendPlainText(text);
+            editor->setPlainText(encodedString);
+            editor->encodedStr = encodedString;
             if(suf == "cpp" || suf == "h" || suf == "c" || suf == "hpp"){
                 if(editor->highlighter != nullptr){
                     delete editor->highlighter;
@@ -146,7 +154,7 @@ void MainWindow::OpenFileMenu()
                 editor->highlighter = nullptr;
             }
             editor->save = false;
-            editor->status = false;
+            editor->status = true;
             file.close();
             setFileInfo(filepath);
             setFilePathLabel(filepath);
@@ -242,8 +250,19 @@ void MainWindow::SaveFileMenu()
                 return;
             QFile file(filepath);
             QString text = editor->document()->toPlainText();
+            QTextCodec *codec;
+            if(editor->codir == "UTF8"){
+                codec = QTextCodec::codecForName("UTF8");
+            }else if(editor->codir == "IBM866"){
+                codec = QTextCodec::codecForName("IBM866");
+            }else{
+                codec = QTextCodec::codecForName("Windows-1251");
+            }
+            QByteArray encodedString = codec->fromUnicode(text);
+            editor->encodedStr = encodedString;
+
             file.open(QIODevice::WriteOnly|QIODevice::Text);
-            file.write(text.toUtf8());
+            file.write(encodedString);
             file.close();
 
             QFileInfo inf(filepath);
@@ -256,10 +275,22 @@ void MainWindow::SaveFileMenu()
         }else{
             QFile file(editor->path);
             QString text = editor->document()->toPlainText();
-            file.open(QIODevice::WriteOnly|QIODevice::Text);
-            file.write(text.toUtf8());
-            file.close();
 
+            QTextCodec *codec;
+            if(editor->codir == "UTF8"){
+                codec = QTextCodec::codecForName("UTF8");
+            }else if(editor->codir == "IBM866"){
+                codec = QTextCodec::codecForName("IBM866");
+            }else{
+                codec = QTextCodec::codecForName("Windows-1251");
+            }
+            QByteArray encodedString = codec->fromUnicode(text);
+            editor->encodedStr = encodedString;
+
+            file.open(QIODevice::WriteOnly|QIODevice::Text);
+            file.write(encodedString);
+            file.close();
+            MainWindow::addZVTabWidget(ui->tabWidget->currentIndex());
         }
     }
 }
@@ -270,10 +301,28 @@ void MainWindow::SaveAtFileMenu()
     QString filepath = QFileDialog::getSaveFileName(this,"Save", "", "");
     QFile file(filepath);
     QString text = editor->document()->toPlainText();
+
+    QTextCodec *codec;
+    if(editor->codir == "UTF8"){
+        codec = QTextCodec::codecForName("UTF8");
+    }else if(editor->codir == "IBM866"){
+        codec = QTextCodec::codecForName("IBM866");
+    }else{
+        codec = QTextCodec::codecForName("Windows-1251");
+    }
+    QByteArray encodedString = codec->fromUnicode(text);
+    editor->encodedStr = encodedString;
+
     file.open(QIODevice::WriteOnly|QIODevice::Text);
-    file.write(text.toUtf8());
+    file.write(encodedString);
     file.close();
+
+    QFileInfo inf(filepath);
+    QString filename = inf.fileName();
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), filename);
+
     editor->save = true;
+    editor->status = true;
     editor->path = filepath;
 }
 
@@ -389,6 +438,11 @@ void MainWindow::setupMenuBar()
     Color->addAction(tr("JSON"), this, &MainWindow::addJSONColorMenu);
     Color->addAction(tr("QSS"), this, &MainWindow::addQSSColorMenu);
     Color->addAction(tr("PlainText"), this, &MainWindow::addPlainTextColorMenu);
+    QMenu* Codir = new QMenu(tr("Кодировка"), this);
+    ui->menubar->addMenu(Codir);
+    Codir->addAction(tr("UTF8"), this, &MainWindow::setCoderMenuBarUTF8);
+    Codir->addAction(tr("IBM866"), this, &MainWindow::setCoderMenuBarIBM866);
+    Codir->addAction(tr("Windows-1251"), this, &MainWindow::setCoderMenuBarWindows_1251);
 }
 
 
@@ -421,7 +475,59 @@ void MainWindow::setSave()
 void MainWindow::addZVTabWidget(int index)
 {
     if(ui->tabWidget->tabText(index)[ui->tabWidget->tabText(index).length() - 1] == '*'){
-        ui->tabWidget->setTabText(index, ui->tabWidget->tabText(index).chopped(ui->tabWidget->tabText(index).length() - 2));
+        QString text = ui->tabWidget->tabText(index);
+        text[text.length() - 1] = ' ';
+        ui->tabWidget->setTabText(index, text);
     }
 
+}
+
+void MainWindow::setCoderMenuBarUTF8()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    editor->codir = "UTF8";
+    ui->pushButton_2->setText(editor->codir);
+    QString text = editor->document()->toPlainText();
+    QTextCodec *codec;
+    codec = QTextCodec::codecForName("UTF8");
+    QByteArray encodedString;
+    encodedString = codec->fromUnicode(editor->encodedStr);
+    editor->setPlainText(encodedString);
+    editor->save = true;
+    MainWindow::addZVTabWidget(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::setCoderMenuBarIBM866()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    editor->codir = "IBM866";
+    ui->pushButton_2->setText(editor->codir);
+    QString text = editor->document()->toPlainText();
+    QTextCodec *codec;
+    codec = QTextCodec::codecForName("IBM866");
+    QByteArray encodedString;
+    encodedString = codec->fromUnicode(editor->encodedStr);
+    editor->setPlainText(encodedString);
+    editor->save = true;
+    MainWindow::addZVTabWidget(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::setCoderMenuBarWindows_1251()
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    editor->codir = "Windows-1251";
+    ui->pushButton_2->setText(editor->codir);
+    QTextCodec *codec;
+    QByteArray encodedString;
+    codec = QTextCodec::codecForName("Windows-1251");
+    encodedString = codec->fromUnicode(editor->encodedStr);
+    editor->setPlainText(encodedString);
+    editor->save = true;
+    MainWindow::addZVTabWidget(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::setCodirLabel(int index)
+{
+    CodeEditor* editor = qobject_cast<CodeEditor*>(ui->tabWidget->widget(index));
+    ui->pushButton_2->setText(editor->codir);
 }

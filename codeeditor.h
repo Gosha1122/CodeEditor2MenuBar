@@ -4,6 +4,7 @@
 #include <QPlainTextEdit>
 #include <QSyntaxHighlighter>
 
+
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
 class QResizeEvent;
@@ -28,6 +29,8 @@ public:
     QSyntaxHighlighter* highlighter = nullptr;
     bool save;
     bool status;
+    QString codir = "UTF8";
+    QByteArray encodedStr;
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
